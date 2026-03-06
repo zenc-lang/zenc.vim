@@ -143,30 +143,6 @@ syn keyword zencConstant
     \ nullptr
     \ true
 
-syn keyword zencDecoratorName contained transparent
-    \ align
-    \ cold
-    \ comptime
-    \ constructor
-    \ ctype
-    \ deprecated
-    \ derive
-    \ destructor
-    \ device
-    \ export
-    \ global
-    \ host
-    \ hot
-    \ inline
-    \ must_use
-    \ noinline
-    \ noreturn
-    \ packed
-    \ pure
-    \ section
-    \ unused
-    \ weak
-
 syn match zencOperator /\v(\<\=|\>\=|\=\=|!\=|\=|\.|\+|-|\*|\/|\%|\<|\>|\&|\||\^|!|\~|\[|\])/
 
 syn match zencGenericOperator contained /\v\*/
@@ -224,11 +200,15 @@ syn match zencIdentifier /\v[A-Za-z_]\w*/
 " This will highlight both generic and non generic function names.
 syn match zencFunctionName /\v[A-Za-z_]\w*\ze(\<[0-9A-Za-z_, \t\<\>\*]+\>)?\(/
 
-syn match zencDecorator contains=zencDecoratorName /\v\@\w+/
+syn match zencDecorator /\v\@\w+/
 
 syn match zencEllipsis /\v\.\.\./
 
-syn region zencMacro contains=zencContainedString start=/\v^\s*#/ skip=/\\$/ end=/$/
+syn region zencMacro
+    \ contains=zencContainedString
+    \ start=/\v^\s*#/
+    \ skip=/\\$/
+    \ end=/\v\ze(\/\/.*|\/\*.*)?$/
 
 " Special coloring for filename strings in include macros
 syn match zencMacro contains=zencContainedString,zencAngleString /\v^\s*#\s*include\s+[<"].+[>"]/
@@ -237,10 +217,13 @@ syn match zencMacro contains=zencContainedString,zencAngleString /\v^\s*#\s*incl
 syn match zencKeyword contains=zencContainedString,zencAngleString /\v^\s*include\s+[<"].+[>"]/
 
 " Single-line comments
-syn match zencComment /\v\/\/.*/
+syn match zencComment /\v\/\/.*$/
 
 " Multi-line comments
 syn region zencComment start=/\v\/\*/ end=/\v\*\//
+
+" Fixes comment highlighting when scrolling buffer with <C-e>.
+syn sync ccomment zencComment
 
 hi def link zencKeyword Statement
 hi def link zencType Type
