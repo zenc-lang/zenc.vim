@@ -10,7 +10,18 @@ NOTE: This plugin should work fine for most Zen C code that you'll encounter or 
 
 If you use a plugin manager, please consult your plugin manager's docs for installation instructions. Generally you shouldn't need to specify anything beyond the plugin source (e.g. `zenc-lang/zenc.vim`).
 
-For users of [lazy.nvim](https://github.com/folke/lazy.nvim), note that this plugin already does its own lazy loading (it will only be loaded when you open a `.zc` file). As such, you don't need to set any additional lazy loading options for this plugin.
+For users of [lazy.nvim](https://github.com/folke/lazy.nvim) or [yegappan/lsp](https://github.com/yegappan/lsp), note that this plugin already does its own lazy loading (it will only be loaded when you open a `.zc` file). As such, you don't need to set any additional lazy loading options for this plugin.
+```vim
+Plug 'zenc-lang/zenc.vim'
+
+setl omnifunc=LspOmniFunc
+au filetype zenc call LspAddServer([#{
+            \    name: 'zenc',
+            \    filetype: ['zenc'],
+            \    path: 'zc',
+            \    args: ['lsp']
+            \  }])
+```
 
 #### Manual Install
 
